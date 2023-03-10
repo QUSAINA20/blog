@@ -62,7 +62,7 @@ class PostController extends Controller
     public function edit($slug)
     {
         $post = $this->postRepository->getBySlug($slug);
-        $categories = Category::all();
+        $categories = $this->postRepository->getCategories();
         return view('posts.edit', compact('post', 'categories'));
     }
 
