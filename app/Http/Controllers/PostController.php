@@ -2,27 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Post;
+use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     protected $postRepository;
+    protected $categoryRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
+    public function __construct(PostRepositoryInterface $postRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
-    public function index()
+
+
+    public function index(Request $request)
     {
-        $posts = $this->postRepository->getAll();
-        return view('posts.index', compact('posts'));
+        $query = $request->input('query');
+        $categorySlug = $request->input('category');
+
+        $categories = $this->categoryRepository->getAll();
+        $posts = $this->postRepository->search($query, $categorySlug);
+
+        return view('posts.index', compact('categories', 'posts', 'query', 'categorySlug'));
     }
 
     public function create()
     {
-        return view('posts.create');
+
+        $categories = $this->postRepository->getCategories();
+        return view('posts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -30,6 +44,7 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
+            'category_id' => 'nullable|exists:categories,id',
             'image' => ['nullable', 'image']
         ]);
 
@@ -47,7 +62,8 @@ class PostController extends Controller
     public function edit($slug)
     {
         $post = $this->postRepository->getBySlug($slug);
-        return view('posts.edit', compact('post'));
+        $categories = Category::all();
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     public function update(Request $request, $slug)
@@ -55,7 +71,9 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
-            'image' => 'image', 'nullable'
+            'image' => 'image', 'nullable',
+            'category_id' => 'nullable|exists:categories,id',
+
         ]);
 
         $post = $this->postRepository->getBySlug($slug);

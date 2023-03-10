@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -12,20 +13,43 @@ use Illuminate\Support\Str;
 class PostRepository implements PostRepositoryInterface
 {
     protected $model;
+    protected $categoryRepository;
 
-    public function __construct(Post $model)
+
+    public function __construct(Post $model, CategoryRepository $categoryRepository)
     {
         $this->model = $model;
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->with('category')->paginate(3);
     }
+    public function search($query, $categorySlug = null)
+    {
+        $postsQuery = Post::query()
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%$query%")
+                    ->orWhere('body', 'LIKE', "%$query%");
+            })
+            ->with('category');
+
+        if ($categorySlug) {
+            $category = $this->categoryRepository->getBySlug($categorySlug);
+            if ($category) {
+                $postsQuery->where('category_id', $category->id);
+            }
+        }
+
+        return $postsQuery->paginate(3);
+    }
+
+
 
     public function getBySlug($slug)
     {
-        return $this->model->where('slug', $slug)->first();
+        return $this->model->where('slug', $slug)->with('category')->first();
     }
 
     public function create(array $data)
@@ -35,6 +59,11 @@ class PostRepository implements PostRepositoryInterface
 
         if (isset($data['image'])) {
             $post->addMediaFromRequest('image')->toMediaCollection('images');
+        }
+        if (isset($data['category_id'])) {
+            $category = Category::find($data['category_id']);
+            $post->category()->associate($category);
+            $post->save();
         }
 
         return $post;
@@ -51,8 +80,17 @@ class PostRepository implements PostRepositoryInterface
             $post->clearMediaCollection('images');
             $post->addMediaFromRequest('image')->toMediaCollection('images');
         }
+        if (isset($data['category_id'])) {
+            $category = Category::find($data['category_id']);
+            $post->category()->associate($category);
+            $post->save();
+        }
 
         return $post;
+    }
+    public function getCategories()
+    {
+        return Category::all();
     }
 
     public function delete(Post $post)
