@@ -27,6 +27,6 @@
         </table>
         <p style="font-size: 16px;">Thank you for your message.we will contatct with you soon</p>
     </div>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit nihil autem dolores esse minima animi eveniet quis tempore repudiandae assumenda fuga dicta soluta obcaecati commodi excepturi, consequatur inventore exercitationem fugiat!
+
 </body>
 </html>
