@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,9 @@ Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->
 Route::get('/categories/{category:slug}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::put('/categories/{category:slug}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('/categories/{category:slug}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/contact', [ContactUsController::class, 'showContactForm'])->name('contact.show');
+Route::post('/contact', [ContactUsController::class, 'submitContactForm'])->name('contact.submit');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });

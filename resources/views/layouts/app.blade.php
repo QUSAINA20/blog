@@ -50,6 +50,9 @@
                 <li class="nav-item {{ Request::is('categories/create') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('categories.create') }}">Create Category</a>
                 </li>
+                <li class="nav-item {{Request::routeIs('contact.show') ? 'active' : ''}}">
+                    <a class="nav-link" href="{{ route('contact.show') }}">Contact Us</a>
+                </li>
             </ul>
         </div>
     </nav>
