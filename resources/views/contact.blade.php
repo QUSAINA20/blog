@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.blog')
 @section('content')
 <form action="{{ route('contact.submit') }}" method="POST">
     @csrf
