@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,14 @@ Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.s
 Route::get('/posts/{post:slug}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post:slug}', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post:slug}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+Route::post('/posts/{post:slug}/comments', [PostCommentsController::class, 'store'])->name('comments.store');
+Route::get('/posts/{post:slug}/comments/edit', [PostCommentsController::class, 'edit'])->name('comments.edit');
+Route::put('/posts/{post:slug}/comments/{comment}', [PostCommentsController::class, 'update'])->name('comments.update');
+Route::delete('/posts/{post:slug}/comments/{comment}', [PostCommentsController::class, 'destroy'])->name('comments.destroy');
+
+
+
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');

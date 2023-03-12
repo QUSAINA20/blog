@@ -34,7 +34,6 @@ class PostController extends Controller
 
     public function create()
     {
-
         $categories = $this->postRepository->getCategories();
         return view('posts.create', compact('categories'));
     }

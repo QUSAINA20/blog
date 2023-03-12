@@ -19,6 +19,31 @@
                         <img src="{{ $post->getFirstMedia('images')->getUrl() }}" alt="" style="max-width:500px;">
                     </div>
                 @endif
+                @foreach($post->comments as $comment)
+                    <li>
+                        <strong>{{ $comment->user->name }}</strong> said:
+                         {{ $comment->body }}
+                        </li>
+                @endforeach
+                <div class="container mt-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Add a Comment:</h4>
+                            <form method="POST" action="{{ route('comments.store', ['post' => $post->slug]) }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Comment:</label>
+                                    <textarea name="body" class="form-control" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-footer">
                 <a href="{{ route('posts.edit', ['post' => $post->slug]) }}" class="btn btn-primary">Edit</a>
