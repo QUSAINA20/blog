@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->with('category')->paginate(3);
+        return $this->model->with('category', 'user')->paginate(3);
     }
     public function search($query, $categorySlug = null)
     {
@@ -49,7 +50,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getBySlug($slug)
     {
-        return $this->model->where('slug', $slug)->with('category')->first();
+        return $this->model->where('slug', $slug)->with('category', 'user')->first();
     }
 
     public function create(array $data)
@@ -63,9 +64,15 @@ class PostRepository implements PostRepositoryInterface
         if (isset($data['category_id'])) {
             $category = Category::find($data['category_id']);
             $post->category()->associate($category);
-            $post->save();
+        }
+        if (isset($data['user_id'])) {
+            $user = User::find($data['user_id']);
+            $post->user()->associate($user);
+        } else {
+            $post->user_id = auth()->user()->id;
         }
 
+        $post->save();
         return $post;
     }
 
@@ -83,8 +90,12 @@ class PostRepository implements PostRepositoryInterface
         if (isset($data['category_id'])) {
             $category = Category::find($data['category_id']);
             $post->category()->associate($category);
-            $post->save();
         }
+        if (isset($data['user_id'])) {
+            $user = User::find($data['user_id']);
+            $post->user()->associate($user);
+        }
+        $post->save();
 
         return $post;
     }

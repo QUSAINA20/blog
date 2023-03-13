@@ -39,16 +39,18 @@
                             <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-primary">Read More</a>
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
+                            <small class="text-muted">{{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</small>
                         </div>
                     </div>
                 </div>
+
             @empty
                 <div class="col-md-12">
                     <p>No posts found.</p>
                 </div>
             @endforelse
         </div>
+
         <div class="row justify-content-center mt-4">
             <div class="col-md-4">
                 {{ $posts->appends(['query' => $query, 'category' => $categorySlug])->links('pagination::bootstrap-5') }}

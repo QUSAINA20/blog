@@ -15,7 +15,8 @@ class Post extends Model implements HasMedia
         'title',
         'slug',
         'body',
-        'category_id'
+        'category_id',
+        'user_id'
     ];
     public function getExcerptAttribute()
     {
@@ -28,5 +29,9 @@ class Post extends Model implements HasMedia
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
