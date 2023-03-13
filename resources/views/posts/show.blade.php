@@ -20,12 +20,23 @@
                         <img src="{{ $post->getFirstMedia('images')->getUrl() }}" alt="" style="max-width:500px;">
                     </div>
                 @endif
-                @foreach($post->comments as $comment)
-                    <li>
-                        <strong>{{ $comment->user->name }}</strong> said:
-                         {{ $comment->body }}
-                        </li>
-                @endforeach
+                <div class="container mt-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Comments:</h4>
+                            @foreach($post->comments as $comment)
+                                <div class="media">
+                                    <img class="mr-3" src="https://via.placeholder.com/50x50" alt="User Avatar">
+                                    <div class="media-body">
+                                        <h5 class="mt-0">{{ $comment->user->name }}</h5>
+                                        <p>{{ $comment->body }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
                 <div class="container mt-5">
                     <div class="card">
                         <div class="card-body">
