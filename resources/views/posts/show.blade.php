@@ -30,13 +30,21 @@
                                     <div class="media-body">
                                         <h5 class="mt-0">{{ $comment->user->name }}</h5>
                                         <p>{{ $comment->body }}</p>
+                                        @auth
+                                            @if(auth()->user()->id === $comment->user_id)
+                                                <form action="{{ route('comments.destroy', ['post' => $post->slug, 'comment' => $comment->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            @endif
+                                        @endauth
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                 </div>
-
                 <div class="container mt-5">
                     <div class="card">
                         <div class="card-body">

@@ -33,27 +33,11 @@ class PostCommentsController extends Controller
         return view('comments.edit', ['comment' => $comment]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        $validation = $request->validate([
-            'body'   => 'required',
-        ]);
-
-        $comment->update($validation);
-        return redirect()->route('posts.show', $comment->post);
-    }
 
 
-    public function destroy(Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
         $comment->delete();
-        return redirect()->back();
+        return redirect()->route('posts.show', $post->slug)->with('success', 'Comment deleted successfully');
     }
 }
