@@ -50,7 +50,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getBySlug($slug)
     {
-        return $this->model->where('slug', $slug)->with('category', 'user')->first();
+        return $this->model->where('slug', $slug)->with('category', 'user', 'comments')->first();
     }
 
     public function create(array $data)
