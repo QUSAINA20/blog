@@ -54,6 +54,22 @@
                                         </span>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="tags">{{ __('Tags') }}</label>
+                                    <select name="tags[]" id="tags" class="form-control @error('tags') is-invalid @enderror" multiple>
+                                        <option value="" disabled selected>{{ __('Select tags') }}</option>
+                                        @foreach($tags as $tag)
+                                            <option value="{{ $tag->name }}" {{ $post->tags->contains($tag) ? 'selected' : '' }}>
+                                            {{ $tag->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('tags')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                                 @if ($post->getMedia('images')->count() > 0)
                                 <div class="form-group">
                                     <label for="current_image">Current Image</label>

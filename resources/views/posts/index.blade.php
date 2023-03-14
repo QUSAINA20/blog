@@ -36,10 +36,15 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $post->title }}</h5>
                             <p class="card-text">{{ $post->excerpt }}</p>
+                            <small>Tags: </small>
+                                @foreach ($post->tags as $tag )
+                                    {{ $tag->name }},
+                                @endforeach
                             <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-primary">Read More</a>
                         </div>
                         <div class="card-footer">
                             <small class="text-muted">{{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</small>
+
                         </div>
                     </div>
                 </div>

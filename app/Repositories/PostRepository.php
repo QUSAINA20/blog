@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -15,17 +16,19 @@ class PostRepository implements PostRepositoryInterface
 {
     protected $model;
     protected $categoryRepository;
+    protected $tagRepository;
 
 
-    public function __construct(Post $model, CategoryRepository $categoryRepository)
+    public function __construct(Post $model, CategoryRepository $categoryRepository, TagRepositoryInterface $tagRepository)
     {
         $this->model = $model;
         $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function getAll()
     {
-        return $this->model->with('category', 'user')->paginate(3);
+        return $this->model->with('category', 'user', 'tags')->paginate(3);
     }
     public function search($query, $categorySlug = null)
     {
@@ -50,7 +53,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getBySlug($slug)
     {
-        return $this->model->where('slug', $slug)->with('category', 'user', 'comments')->first();
+        return $this->model->where('slug', $slug)->with('category', 'user', 'comments', 'tags')->first();
     }
 
     public function create(array $data)
@@ -71,7 +74,10 @@ class PostRepository implements PostRepositoryInterface
         } else {
             $post->user_id = auth()->user()->id;
         }
-
+        if (isset($data['tags'])) {
+            $tagIds = Tag::whereIn('name', $data['tags'])->pluck('id')->toArray();
+            $post->tags()->attach($tagIds);
+        }
         $post->save();
         return $post;
     }
@@ -95,6 +101,17 @@ class PostRepository implements PostRepositoryInterface
             $user = User::find($data['user_id']);
             $post->user()->associate($user);
         }
+        if (isset($data['tags'])) {
+            $tagIds = [];
+            foreach ($data['tags'] as $tagName) {
+                $tag = Tag::where('name', $tagName)->first();
+                if ($tag) {
+                    $tagIds[] = $tag->id;
+                }
+            }
+            $post->tags()->sync($tagIds);
+        }
+
         $post->save();
 
         return $post;
@@ -102,6 +119,10 @@ class PostRepository implements PostRepositoryInterface
     public function getCategories()
     {
         return Category::all();
+    }
+    public function gettags()
+    {
+        return Tag::all();
     }
 
     public function delete(Post $post)

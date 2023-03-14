@@ -6,6 +6,10 @@
             <div class="card-header">
                 <h1>{{ $post->title }}</h1>
                 <h2>written by : {{ $post->user->name }}</h2>
+                <small>Tags: </small>
+                @foreach ($post->tags as $tag )
+                     {{ $tag->name }},
+                @endforeach
             </div>
             <div class="card-body">
                 <p>{{ $post->body }}</p>

@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\PostRepositoryInterface;
+use App\Repositories\TagRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
     protected $postRepository;
     protected $categoryRepository;
+    protected $tagRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository, CategoryRepositoryInterface $categoryRepository)
+    public function __construct(PostRepositoryInterface $postRepository, CategoryRepositoryInterface $categoryRepository, TagRepositoryInterface $tagRepository)
     {
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
 
 
@@ -35,16 +40,20 @@ class PostController extends Controller
     public function create()
     {
         $categories = $this->postRepository->getCategories();
-        return view('posts.create', compact('categories'));
+        $tags = $this->postRepository->gettags();
+        return view('posts.create', compact('categories', 'tags'));
     }
 
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
             'category_id' => 'nullable|exists:categories,id',
-            'image' => ['nullable', 'image']
+            'image' => ['nullable', 'image'],
+            'tags' => 'nullable|array',
+            'tags.*' => 'required|string|exists:tags,name'
         ]);
 
         $post = $this->postRepository->create($validatedData);
@@ -62,7 +71,8 @@ class PostController extends Controller
     {
         $post = $this->postRepository->getBySlug($slug);
         $categories = $this->postRepository->getCategories();
-        return view('posts.edit', compact('post', 'categories'));
+        $tags = $this->postRepository->gettags();
+        return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
     public function update(Request $request, $slug)
@@ -72,7 +82,8 @@ class PostController extends Controller
             'body' => 'required',
             'image' => 'image', 'nullable',
             'category_id' => 'nullable|exists:categories,id',
-
+            'tags' => 'nullable|array',
+            'tags.*' => 'required|string|exists:tags,name'
         ]);
 
         $post = $this->postRepository->getBySlug($slug);

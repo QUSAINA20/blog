@@ -53,6 +53,23 @@
                                         </span>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="tags">{{ __('Tags') }}</label>
+                                    <select name="tags[]" id="tags" class="form-control @error('tags') is-invalid @enderror" multiple>
+                                        <option value="" disabled selected>{{ __('Select tags') }}</option>
+                                        @foreach($tags as $tag)
+                                            <option value="{{ $tag->name }}" {{ in_array($tag->name, old('tags', [])) ? 'selected' : '' }}>
+                                                {{ $tag->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('tags')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
                                 <button type="submit" class="btn btn-primary">{{ __('Create Post') }}</button>
                             </form>
                         </div>

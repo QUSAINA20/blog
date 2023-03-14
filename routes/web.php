@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,15 @@ Route::prefix('categories')->middleware('auth')->group(function () {
     Route::get('/{category:slug}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/{category:slug}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/{category:slug}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+});
+Route::prefix('tags')->middleware('auth')->group(function () {
+    Route::get('/', [TagController::class, 'index'])->name('tags.index');
+    Route::get('/create', [TagController::class, 'create'])->name('tags.create');
+    Route::post('/', [TagController::class, 'store'])->name('tags.store');
+    Route::get('/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
+    Route::get('/{tag:slug}/edit', [TagController::class, 'edit'])->name('tags.edit');
+    Route::put('/{tag:slug}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('/{tag:slug}', [TagController::class, 'destroy'])->name('tags.destroy');
 });
 
 Route::middleware('auth')->group(function () {
