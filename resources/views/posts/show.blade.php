@@ -57,7 +57,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}">
+                                    <input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}"readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment">Comment:</label>

@@ -22,18 +22,6 @@ class PostCommentsController extends Controller
         return redirect()->route('posts.show', $post);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comment $comment)
-    {
-        return view('comments.edit', ['comment' => $comment]);
-    }
-
-
 
     public function destroy(Post $post, Comment $comment)
     {

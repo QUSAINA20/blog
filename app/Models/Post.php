@@ -26,10 +26,6 @@ class Post extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -37,5 +33,9 @@ class Post extends Model implements HasMedia
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

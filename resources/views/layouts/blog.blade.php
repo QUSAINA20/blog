@@ -59,6 +59,12 @@
             <li class="nav-item {{ Request::is('categories/create') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('categories.create') }}">Create Category</a>
             </li>
+            <li class="nav-item {{ Request::is('tags*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('tags.index') }}">Tags</a>
+            </li>
+            <li class="nav-item {{ Request::is('images*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('images.index') }}">Images</a>
+            </li>
             <li class="nav-item {{Request::routeIs('contact.show') ? 'active' : ''}}">
                 <a class="nav-link" href="{{ route('contact.show') }}">Contact Us</a>
             </li>

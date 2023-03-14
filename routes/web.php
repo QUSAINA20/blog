@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ImageCommentsController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
@@ -31,8 +33,11 @@ Route::prefix('posts')->middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post:slug}/comments', [PostCommentsController::class, 'store'])->name('comments.store');
-    Route::get('/posts/{post:slug}/comments/{comment}/edit', [PostCommentsController::class, 'edit'])->name('comments.edit');
     Route::delete('/posts/{post:slug}/comments/{comment}', [PostCommentsController::class, 'destroy'])->name('comments.destroy');
+});
+Route::middleware(['auth'])->group(function () {
+    Route::post('/images/{image:slug}/comments', [ImageCommentsController::class, 'store'])->name('image_comments.store');
+    Route::delete('/images/{image:slug}/comments/{comment}', [ImageCommentsController::class, 'destroy'])->name('image_comments.destroy');
 });
 
 Route::prefix('categories')->middleware('auth')->group(function () {
@@ -43,6 +48,15 @@ Route::prefix('categories')->middleware('auth')->group(function () {
     Route::get('/{category:slug}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/{category:slug}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/{category:slug}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+});
+Route::prefix('images')->middleware('auth')->group(function () {
+    Route::get('/', [ImageController::class, 'index'])->name('images.index');
+    Route::get('/create', [ImageController::class, 'create'])->name('images.create');
+    Route::post('/', [ImageController::class, 'store'])->name('images.store');
+    Route::get('/{image:slug}', [imageController::class, 'show'])->name('images.show');
+    Route::get('/{image:slug}/edit', [ImageController::class, 'edit'])->name('images.edit');
+    Route::put('/{image:slug}', [ImageController::class, 'update'])->name('images.update');
+    Route::delete('/{image:slug}', [ImageController::class, 'destroy'])->name('images.destroy');
 });
 Route::prefix('tags')->middleware('auth')->group(function () {
     Route::get('/', [TagController::class, 'index'])->name('tags.index');

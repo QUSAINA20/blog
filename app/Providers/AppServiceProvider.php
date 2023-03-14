@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\CategoryRepository;
 use App\Repositories\CategoryRepositoryInterface;
+use App\Repositories\ImageRepository;
+use App\Repositories\ImageRepositoryInterface;
 use App\Repositories\PostRepository;
 use App\Repositories\PostRepositoryInterface;
 use App\Repositories\TagRepository;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+        $this->app->bind(ImageRepositoryInterface::class, ImageRepository::class);
     }
 
     /**
