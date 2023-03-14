@@ -64,21 +64,15 @@ class PostRepository implements PostRepositoryInterface
         if (isset($data['image'])) {
             $post->addMediaFromRequest('image')->toMediaCollection('images');
         }
-        if (isset($data['category_id'])) {
-            $category = Category::find($data['category_id']);
-            $post->category()->associate($category);
-        }
-        if (isset($data['user_id'])) {
-            $user = User::find($data['user_id']);
-            $post->user()->associate($user);
-        } else {
-            $post->user_id = auth()->user()->id;
-        }
-        if (isset($data['tags'])) {
-            $tagIds = Tag::whereIn('name', $data['tags'])->pluck('id')->toArray();
-            $post->tags()->attach($tagIds);
-        }
+
+        $post->category()->associate(Category::find($data['category_id'] ?? null));
+        $post->user()->associate(User::find($data['user_id'] ?? auth()->user()->id));
         $post->save();
+
+        if (isset($data['tags'])) {
+            $post->tags()->attach(Tag::whereIn('name', $data['tags'])->pluck('id')->toArray());
+        }
+
         return $post;
     }
 
@@ -87,35 +81,30 @@ class PostRepository implements PostRepositoryInterface
         if (isset($data['title'])) {
             $data['slug'] = Str::slug($data['title']);
         }
+
         $post->update($data);
 
         if (isset($data['image']) && $data['image']->isValid()) {
             $post->clearMediaCollection('images');
             $post->addMediaFromRequest('image')->toMediaCollection('images');
         }
+
         if (isset($data['category_id'])) {
-            $category = Category::find($data['category_id']);
-            $post->category()->associate($category);
+            $post->category()->associate(Category::find($data['category_id']));
         }
+
         if (isset($data['user_id'])) {
-            $user = User::find($data['user_id']);
-            $post->user()->associate($user);
+            $post->user()->associate(User::find($data['user_id']));
         }
+
         if (isset($data['tags'])) {
-            $tagIds = [];
-            foreach ($data['tags'] as $tagName) {
-                $tag = Tag::where('name', $tagName)->first();
-                if ($tag) {
-                    $tagIds[] = $tag->id;
-                }
-            }
+            $tagIds = Tag::whereIn('name', $data['tags'])->pluck('id')->toArray();
             $post->tags()->sync($tagIds);
         }
 
-        $post->save();
-
         return $post;
     }
+
     public function getCategories()
     {
         return Category::all();

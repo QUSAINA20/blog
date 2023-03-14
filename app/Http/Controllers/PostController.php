@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -24,13 +25,10 @@ class PostController extends Controller
         $this->tagRepository = $tagRepository;
     }
 
-
-
     public function index(Request $request)
     {
         $query = $request->input('query');
         $categorySlug = $request->input('category');
-
         $categories = $this->categoryRepository->getAll();
         $posts = $this->postRepository->search($query, $categorySlug);
 
@@ -44,18 +42,9 @@ class PostController extends Controller
         return view('posts.create', compact('categories', 'tags'));
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'category_id' => 'nullable|exists:categories,id',
-            'image' => ['nullable', 'image'],
-            'tags' => 'nullable|array',
-            'tags.*' => 'required|string|exists:tags,name'
-        ]);
-
+        $validatedData = $request->validated();
         $post = $this->postRepository->create($validatedData);
         return redirect()->route('posts.show', ['post' => $post->slug])
             ->with('success', 'Post created successfully.');
@@ -75,16 +64,9 @@ class PostController extends Controller
         return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
-    public function update(Request $request, $slug)
+    public function update(PostRequest $request, $slug)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'image' => 'image', 'nullable',
-            'category_id' => 'nullable|exists:categories,id',
-            'tags' => 'nullable|array',
-            'tags.*' => 'required|string|exists:tags,name'
-        ]);
+        $validatedData = $request->validated();
 
         $post = $this->postRepository->getBySlug($slug);
         $this->postRepository->update($post, $validatedData);

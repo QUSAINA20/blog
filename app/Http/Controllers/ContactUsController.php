@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactUsRequest;
 use App\Mail\AdminMail;
 use App\Mail\ContactMail;
 use Illuminate\Http\Request;
@@ -13,14 +14,10 @@ class ContactUsController extends Controller
     {
         return view('contact');
     }
-    public function submitContactForm(Request $request)
+    public function submitContactForm(ContactUsRequest $request)
     {
 
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'content' => 'required',
-        ]);
+        $request->validated();
 
         // Send the email
         Mail::to($request->email)->send(new ContactMail($request->name, $request->email, $request->content));
