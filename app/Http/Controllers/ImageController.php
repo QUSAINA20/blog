@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageRequest;
 use App\Repositories\ImageRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -25,13 +26,9 @@ class imageController extends Controller
         return view('images.create');
     }
 
-    public function store(Request $request)
+    public function store(ImageRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'image' => ['nullable', 'image']
-        ]);
+        $validatedData = $request->validate();
 
         $image = $this->imageRepository->create($validatedData);
         return redirect()->route('images.show', ['image' => $image->slug])
@@ -50,13 +47,9 @@ class imageController extends Controller
         return view('images.edit', compact('image'));
     }
 
-    public function update(Request $request, $slug)
+    public function update(ImageRequest $request, $slug)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'image' => ['nullable', 'image']
-        ]);
+        $validatedData = $request->validate();
 
         $image = $this->imageRepository->getBySlug($slug);
         $this->imageRepository->update($image, $validatedData);
