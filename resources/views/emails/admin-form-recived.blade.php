@@ -10,7 +10,7 @@
     <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #007bff;">Contact Form Submission</h2>
         <p style="font-size: 16px;">Hello,</p>
-        <p style="font-size: 16px;">You have received a new message from the contact form on your website:</p>
+        <p style="font-size: 16px;">You have received a new message from the contact form your website:</p>
         <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
             <tr>
                 <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Name</td>

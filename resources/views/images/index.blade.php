@@ -10,7 +10,6 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Slug</th>
                         <th>Description</th>
                         <th>Action</th>
                     </tr>
@@ -19,7 +18,6 @@
                     @foreach($images as $image)
                         <tr>
                             <td>{{ $image->name }}</td>
-                            <td>{{ $image->slug }}</td>
                             <td>{{ $image->description }}</td>
                             <td>
                                 <a href="{{ route('images.show',['image' => $image->slug]) }}" class="btn btn-info btn-sm">View</a>
