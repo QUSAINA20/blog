@@ -12,7 +12,8 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">{{ __('Name') }}</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required value="{{ old('name') }}">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        id="name" name="name" required value="{{ old('name') }}">
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -21,7 +22,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="name">{{ __('Description') }}</label>
-                                    <input type="text" class="form-control @error('description') is-invalid @enderror" id="description" name="description" required value="{{ old('name') }}">
+                                    <input type="text" class="form-control @error('description') is-invalid @enderror"
+                                        id="description" name="description" required value="{{ old('name') }}">
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -30,7 +32,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="image">{{ __('Image') }}</label>
-                                    <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                                    <input type="file" class="form-control-file @error('image') is-invalid @enderror"
+                                        id="image" name="image" accept="image/*">
                                     @error('image')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
