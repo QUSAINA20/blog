@@ -7,6 +7,30 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Installation steps
+
+After you make your clone,and setup your database settings.
+<br>
+write the commands :
+- composer i.
+- npm i.
+- npm run dev.
+- php artisan migrate.
+<br>
+you need to make sure that (APP_URL=http://localhost:8000 in .env file).
+<br>
+Then write the command.
+<ul>
+<li>php artisan storage:link</li>
+</ul>
+<br>
+Note:
+then if you want to try the factory 
+write the command:
+<ul>
+<li>php artisan db:seed</li>
+</ul>
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
